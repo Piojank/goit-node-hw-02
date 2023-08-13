@@ -22,6 +22,8 @@ router.get('/', async (req, res, next) => {
     res.status(200).json({
       method: req.method,
       endpoint: req.originalUrl,
+      status: 'success',
+      message: 'Contacts fetched successfully',
       data: contacts,
     });
   } catch (error) {
@@ -37,12 +39,15 @@ router.get('/:contactId', async (req, res, next) => {
       return res.status(404).json({
         method: req.method,
         endpoint: req.originalUrl,
+        status: 'error',
         message: 'Contact not found',
       });
     }
     res.status(200).json({
       method: req.method,
       endpoint: req.originalUrl,
+      status: 'success',
+      message: 'Contact fetched successfully',
       data: contact,
     });
   } catch (error) {
@@ -57,6 +62,7 @@ router.post('/', async (req, res, next) => {
       return res.status(400).json({
         method: req.method,
         endpoint: req.originalUrl,
+        status: 'error',
         message: error.details[0].message,
       });
     }
@@ -64,6 +70,8 @@ router.post('/', async (req, res, next) => {
     res.status(201).json({
       method: req.method,
       endpoint: req.originalUrl,
+      status: 'success',
+      message: 'Contact added successfully',
       data: newContact,
     });
   } catch (error) {
@@ -79,12 +87,15 @@ router.delete('/:contactId', async (req, res, next) => {
       return res.status(404).json({
         method: req.method,
         endpoint: req.originalUrl,
+        status: 'error',
         message: 'Contact not found',
       });
     }
     res.status(200).json({
       method: req.method,
       endpoint: req.originalUrl,
+      status: 'success',
+      message: 'Contact removed successfully',
       data: removedContact,
     });
   } catch (error) {
@@ -100,6 +111,7 @@ router.put('/:contactId', async (req, res, next) => {
       return res.status(400).json({
         method: req.method,
         endpoint: req.originalUrl,
+        status: 'error',
         message: error.details[0].message,
       });
     }
@@ -108,12 +120,15 @@ router.put('/:contactId', async (req, res, next) => {
       return res.status(404).json({
         method: req.method,
         endpoint: req.originalUrl,
+        status: 'error',
         message: 'Contact not found',
       });
     }
     res.status(200).json({
       method: req.method,
       endpoint: req.originalUrl,
+      status: 'success',
+      message: 'Contact updated successfully',
       data: updatedContact,
     });
   } catch (error) {
