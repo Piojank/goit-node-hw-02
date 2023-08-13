@@ -19,7 +19,11 @@ const {
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await listContacts();
-    res.status(200).json(contacts);
+    res.status(200).json({
+      method: req.method,
+      endpoint: req.originalUrl,
+      data: contacts,
+    });
   } catch (error) {
     next(error);
   }
@@ -30,9 +34,17 @@ router.get('/:contactId', async (req, res, next) => {
     const contactId = req.params.contactId;
     const contact = await getContactById(contactId);
     if (!contact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      return res.status(404).json({
+        method: req.method,
+        endpoint: req.originalUrl,
+        message: 'Contact not found',
+      });
     }
-    res.status(200).json(contact);
+    res.status(200).json({
+      method: req.method,
+      endpoint: req.originalUrl,
+      data: contact,
+    });
   } catch (error) {
     next(error);
   }
@@ -42,10 +54,18 @@ router.post('/', async (req, res, next) => {
   try {
     const { error, value } = addSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return res.status(400).json({
+        method: req.method,
+        endpoint: req.originalUrl,
+        message: error.details[0].message,
+      });
     }
     const newContact = await addContact(value);
-    res.status(201).json(newContact);
+    res.status(201).json({
+      method: req.method,
+      endpoint: req.originalUrl,
+      data: newContact,
+    });
   } catch (error) {
     next(error);
   }
@@ -56,9 +76,17 @@ router.delete('/:contactId', async (req, res, next) => {
     const contactId = req.params.contactId;
     const removedContact = await removeContact(contactId);
     if (!removedContact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      return res.status(404).json({
+        method: req.method,
+        endpoint: req.originalUrl,
+        message: 'Contact not found',
+      });
     }
-    res.status(200).json(removedContact);
+    res.status(200).json({
+      method: req.method,
+      endpoint: req.originalUrl,
+      data: removedContact,
+    });
   } catch (error) {
     next(error);
   }
@@ -69,13 +97,25 @@ router.put('/:contactId', async (req, res, next) => {
     const contactId = req.params.contactId;
     const { error, value } = addSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return res.status(400).json({
+        method: req.method,
+        endpoint: req.originalUrl,
+        message: error.details[0].message,
+      });
     }
     const updatedContact = await updateContact(contactId, value);
     if (!updatedContact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      return res.status(404).json({
+        method: req.method,
+        endpoint: req.originalUrl,
+        message: 'Contact not found',
+      });
     }
-    res.status(200).json(updatedContact);
+    res.status(200).json({
+      method: req.method,
+      endpoint: req.originalUrl,
+      data: updatedContact,
+    });
   } catch (error) {
     next(error);
   }
